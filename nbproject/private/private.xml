@@ -5,10 +5,13 @@
         <group>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/Test.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/UserDaoImpl.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/User.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/cbt/CBTServer.java</file>
-            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/utils/DbConnection.java</file>
-            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/TestDaoImpl.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/Answer.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/Question.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/TestDao.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/TestDaoImpl.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/UserDao.java</file>
         </group>
     </open-files>
 </project-private>

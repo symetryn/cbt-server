@@ -6,6 +6,7 @@
 package com.cbt.dao;
 
 
+import com.cbt.bll.Test;
 import java.rmi.RemoteException;
 
 /**
@@ -14,7 +15,7 @@ import java.rmi.RemoteException;
  */
 public interface TestDao extends java.rmi.Remote{
     
-    public void saveTest() throws RemoteException;
+    public void saveTest(Test test) throws RemoteException;
 
     public void removeTest(int testId) throws RemoteException;
 
