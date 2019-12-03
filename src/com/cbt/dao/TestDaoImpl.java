@@ -49,8 +49,12 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             if (generatedKeys.next()) {
                 int testId = generatedKeys.getInt(1);
                 System.out.println("generated test id " + testId);
-                saveQuestion(testId, test);
+                ArrayList<Question> questions = test.getQuestions();
+                questions.forEach((value) -> {
+                    saveQuestion(testId, value);
+                });
 
+//                saveQuestion(testId, test);
             } else {
                 throw new SQLException("Creating test failed, no ID obtained.");
             }
@@ -60,53 +64,50 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
-    private void saveQuestion(int testId, Test test) {
+    private void saveQuestion(int testId, Question question) {
         try {
             String query = "INSERT INTO question (TITLE,MARKS,TEST_ID) VALUES(?,?,?)";
             PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            ArrayList<Question> questions = test.getQuestions();
-            questions.forEach((value) -> {
-                try {
-                    ps.setString(1, value.getTitle());
-                    ps.setInt(2, value.getMarks());
-                    ps.setInt(3, testId);
-                    ps.executeUpdate();
-                    ResultSet generatedKeys = ps.getGeneratedKeys();
-                    if (generatedKeys.next()) {
-                        int questionId = generatedKeys.getInt(1);
-                        System.out.println("generated question id " + testId);
-                        String answerQuery = "INSERT INTO answer (TITLE,CORRECT_STATUS,QUESTION_ID) VALUES(?,?,?)";
-                        PreparedStatement psmt = cn.prepareStatement(answerQuery, Statement.RETURN_GENERATED_KEYS);
-                        ArrayList<Answer> answers = value.getAnswers();
-                        answers.forEach((answer) -> {
-                            try {
-                                psmt.setString(1, answer.getTitle());
-                                psmt.setBoolean(2, answer.getCorrectAnswer());
-                                psmt.setInt(3, questionId);
-                                psmt.addBatch();
-                            } catch (SQLException ex) {
-                                Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                ps.setString(1, question.getTitle());
+                ps.setInt(2, question.getMarks());
+                ps.setInt(3, testId);
+                ps.executeUpdate();
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int questionId = generatedKeys.getInt(1);
+                    System.out.println("generated question id " + testId);
+                    String answerQuery = "INSERT INTO answer (TITLE,CORRECT_STATUS,QUESTION_ID) VALUES(?,?,?)";
+                    PreparedStatement psmt = cn.prepareStatement(answerQuery, Statement.RETURN_GENERATED_KEYS);
+                    ArrayList<Answer> answers = question.getAnswers();
+                    answers.forEach((answer) -> {
+                        try {
+                            psmt.setString(1, answer.getTitle());
+                            psmt.setBoolean(2, answer.getCorrectAnswer());
+                            psmt.setInt(3, questionId);
+                            psmt.addBatch();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+                    int[] numUpdates = psmt.executeBatch();
+                        for (int i = 0; i < numUpdates.length; i++) {
+                            if (numUpdates[i] == -2) {
+                                System.out.println("Execution " + i
+                                        + ": unknown number of rows updated");
+                            } else {
+                                System.out.println("Execution " + i
+                                        + "successful: " + numUpdates[i] + " rows updated");
                             }
-                        });
-                        int[] numUpdates = psmt.executeBatch();
-//                        for (int i = 0; i < numUpdates.length; i++) {
-//                            if (numUpdates[i] == -2) {
-//                                System.out.println("Execution " + i
-//                                        + ": unknown number of rows updated");
-//                            } else {
-//                                System.out.println("Execution " + i
-//                                        + "successful: " + numUpdates[i] + " rows updated");
-//                            }
-//                        }
-                    } else {
-                        throw new SQLException("Creating test failed, no ID obtained.");
-                    }
-
-                } catch (SQLException ex) {
-                    System.out.print(ex);
-                    Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                } else {
+                    throw new SQLException("Creating test failed, no ID obtained.");
                 }
-            });
+
+            } catch (SQLException ex) {
+                System.out.print(ex);
+                Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
