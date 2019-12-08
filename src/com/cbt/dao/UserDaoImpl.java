@@ -18,16 +18,15 @@ import java.sql.SQLException;
  * @author Symetryn
  */
 public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements UserDao {
-    Connection cn= DbConnection.myConnection();
 
-    
+    Connection cn = DbConnection.myConnection();
 
     public UserDaoImpl() throws RemoteException {
         super();
     }
 
     @Override
-    public Boolean validateLogin(String Username, String Password) {
+    public String validateLogin(String Username, String Password) {
         try {
             System.out.print("print called");
             String query = "SELECT * FROM USERS WHERE UID=? AND PASSWORD=?";
@@ -35,8 +34,13 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             ps.setString(1, Username);
             ps.setString(2, Password);
             ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String role = rs.getString("role");
+                return role;
+            } else {
+                return "invalid";
+            }
 
-            return rs.next();
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -48,7 +52,7 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             System.out.print("print called");
             String query = "INSERT INTO USERS (UID,FIRSTNAME,LASTNAME,EMAIL,PHOTO,PASSWORD,LEVEL,SEMESTER) VALUES(?,?,?,?,?,?,?,?) ";
             PreparedStatement ps = cn.prepareStatement(query);
-            
+
             ps.setInt(1, user.getUserID());
             ps.setString(2, user.getFirstName());
             ps.setString(3, user.getLastName());
@@ -59,7 +63,6 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             ps.setInt(8, user.getSemester());
 
             ps.executeUpdate();
-            
 
         } catch (SQLException e) {
             throw new Error(e);

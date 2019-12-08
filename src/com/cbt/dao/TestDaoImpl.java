@@ -35,7 +35,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     @Override
     public void saveTest(Test test) {
         try {
-            System.out.print("print called");
+            System.out.print("Test Saved");
             String query = "INSERT INTO TEST (TITLE) VALUES(?) ";
             PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, test.getTitle());
@@ -91,15 +91,15 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                         }
                     });
                     int[] numUpdates = psmt.executeBatch();
-                        for (int i = 0; i < numUpdates.length; i++) {
-                            if (numUpdates[i] == -2) {
-                                System.out.println("Execution " + i
-                                        + ": unknown number of rows updated");
-                            } else {
-                                System.out.println("Execution " + i
-                                        + "successful: " + numUpdates[i] + " rows updated");
-                            }
+                    for (int i = 0; i < numUpdates.length; i++) {
+                        if (numUpdates[i] == -2) {
+                            System.out.println("Execution " + i
+                                    + ": unknown number of rows updated");
+                        } else {
+                            System.out.println("Execution " + i
+                                    + "successful: " + numUpdates[i] + " rows updated");
                         }
+                    }
                 } else {
                     throw new SQLException("Creating test failed, no ID obtained.");
                 }
@@ -122,6 +122,86 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     @Override
     public void getAllQuestions(int tId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<Test> getAllTest() throws RemoteException {
+        try {
+            System.out.print("print called");
+            String query = "SELECT * FROM TEST";
+            PreparedStatement ps = cn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Test> testList = new ArrayList();
+            while (rs.next()) {
+                Test t = new Test();
+                t.setTitle(rs.getString("title"));
+                t.setDate(rs.getDate("date"));
+                testList.add(t);
+
+            }
+            return testList;
+
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+
+//    @Override
+//    public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
+        
+//    }
+
+    @Override
+    public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
+        try {
+            System.out.print("print called");
+            String query = "SELECT * FROM TEST WHERE DATE>=CURDATE()";
+            PreparedStatement ps = cn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Test> testList = new ArrayList();
+
+            while (rs.next()) {
+                Test t = new Test();
+                t.setTitle(rs.getString("title"));
+                t.setDate(rs.getDate("date"));
+                testList.add(t);
+                System.out.println(t.getTitle());
+
+            }
+            return testList;
+
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+    
+     @Override
+    public ArrayList<Test> getTestSearch(String searchQuery) throws RemoteException {
+        try {
+            final int LIMIT=8;
+            System.out.print("print called");
+            String query = "SELECT * FROM TEST WHERE TITLE LIKE ? LIMIT ?";
+            PreparedStatement ps = cn.prepareStatement(query);
+            
+            ps.setString(1, searchQuery+"%");
+            ps.setInt(2, LIMIT);
+
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Test> testList = new ArrayList();
+            
+            while (rs.next()) {
+                Test t = new Test();
+                t.setTitle(rs.getString("title"));
+                t.setDate(rs.getDate("date"));
+                testList.add(t);
+            }
+            return testList;
+
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
     }
 
 }
