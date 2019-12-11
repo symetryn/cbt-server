@@ -5,7 +5,6 @@
  */
 package com.cbt.bll;
 
-import com.cbt.bll.Answer;
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -18,9 +17,14 @@ public class Question implements Serializable {
 
     private static final long serialVersionUID=3L;
     
+    private int id;
     private String title;
     private int marks;
     private ArrayList<Answer> answers;
+    
+    public Question(){
+        answers=new ArrayList();
+    }
 
     public String getTitle() {
         return title;
@@ -38,8 +42,8 @@ public class Question implements Serializable {
         this.answers = answers;
     }
 
-    public void addAnswer(Answer answer) {
-        this.answers.add(answer);
+    public void addAnswer(Answer a) {
+        this.answers.add(a);
     }
 
     public void removeAnswer(int index) {
@@ -53,6 +57,15 @@ public class Question implements Serializable {
     public void setMarks(int marks) {
         this.marks = marks;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     
 
 }

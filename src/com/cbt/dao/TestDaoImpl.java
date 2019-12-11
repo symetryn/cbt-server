@@ -36,13 +36,23 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     public void saveTest(Test test) {
         try {
             System.out.print("Test Saved");
-            String query = "INSERT INTO TEST (TITLE) VALUES(?) ";
+            String query = "INSERT INTO TEST (TITLE,PASSWORD,DATE,LEVEL,SEMESTER,PASS_MARKS,FULL_MARKS,DURATION,START_TIME,END_TIME) VALUES(?,?,?,?,?,?,?,?,?,?) ";
             PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, test.getTitle());
-            int affectedRows = ps.executeUpdate();
+            ps.setString(2,test.getPassword());
+            ps.setDate(3, test.getDate());
+            ps.setInt(4, test.getLevel());
+            ps.setInt(5, test.getSemester());
+            ps.setInt(6, test.getPassMarks());
+            ps.setInt(7, test.getFullMarks());
+            ps.setInt(8, test.getDuration());
+            ps.setTime(9, test.getStartTime());
+            ps.setTime(10, test.getEndTime());
 
-            if (affectedRows == 0) {
-                throw new SQLException("Creating test failed, no rows affected.");
+            int createdRows = ps.executeUpdate();
+
+            if (createdRows == 0) {
+                throw new SQLException("Creating test failed, no rows created.");
             }
 
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -135,6 +145,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             ArrayList<Test> testList = new ArrayList();
             while (rs.next()) {
                 Test t = new Test();
+                t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));
                 t.setDate(rs.getDate("date"));
                 testList.add(t);
@@ -149,9 +160,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
 //    @Override
 //    public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
-        
 //    }
-
     @Override
     public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
         try {
@@ -164,6 +173,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
             while (rs.next()) {
                 Test t = new Test();
+                t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));
                 t.setDate(rs.getDate("date"));
                 testList.add(t);
@@ -176,28 +186,92 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             throw new Error(e);
         }
     }
-    
-     @Override
+
+    @Override
     public ArrayList<Test> getTestSearch(String searchQuery) throws RemoteException {
         try {
-            final int LIMIT=8;
+            final int LIMIT = 8;
             System.out.print("print called");
             String query = "SELECT * FROM TEST WHERE TITLE LIKE ? LIMIT ?";
             PreparedStatement ps = cn.prepareStatement(query);
-            
-            ps.setString(1, searchQuery+"%");
+
+            ps.setString(1, searchQuery + "%");
             ps.setInt(2, LIMIT);
 
             ResultSet rs = ps.executeQuery();
             ArrayList<Test> testList = new ArrayList();
-            
+
             while (rs.next()) {
                 Test t = new Test();
+                t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));
                 t.setDate(rs.getDate("date"));
                 testList.add(t);
             }
             return testList;
+
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public Test getTest(int testId) throws RemoteException {
+        try {
+            final int LIMIT = 8;
+            System.out.print("print called");
+            String query = "SELECT * FROM TEST WHERE TID= ? LIMIT ?";
+            PreparedStatement ps = cn.prepareStatement(query);
+
+            ps.setInt(1, testId);
+            ps.setInt(2, LIMIT);
+
+            ResultSet rs = ps.executeQuery();
+
+            Test test = new Test();
+            rs.next();
+            test.setId(rs.getInt("TID"));
+            test.setTitle(rs.getString("title"));
+            test.setDate(rs.getDate("date"));
+            test.setStartTime(rs.getTime("start_time"));
+            test.setEndTime(rs.getTime("end_time"));
+            test.setLevel(rs.getInt("level"));
+            test.setSemester(rs.getInt("semester"));
+            test.setPassword(rs.getString("password"));
+            test.setDuration(rs.getInt("duration"));
+            test.setPassMarks(rs.getInt("pass_marks"));
+            test.setFullMarks(rs.getInt("full_marks"));
+
+            String questionQuery = "SELECT * FROM QUESTION WHERE test_id= ?";
+            PreparedStatement psq = cn.prepareStatement(questionQuery);
+
+            psq.setInt(1, test.getId());
+            ResultSet rsq = psq.executeQuery();
+
+            while (rsq.next()) {
+                System.out.println("questoin ran");
+                Question q = new Question();
+
+                q.setTitle(rsq.getString("title"));
+                q.setMarks(rsq.getInt("marks"));
+                q.setId(rsq.getInt("QID"));
+
+                String answerQuery = "SELECT * FROM ANSWER WHERE question_id= ?";
+                PreparedStatement psa = cn.prepareStatement(answerQuery);
+
+                psa.setInt(1, q.getId());
+                ResultSet rsa = psa.executeQuery();
+
+                while (rsa.next()) {
+                    System.out.println("answer ran");
+                    q.addAnswer(new Answer(rsa.getString("title"), rsa.getBoolean("correct_status")));
+
+                }
+
+                test.pushQuestion(q);
+            }
+            System.out.println(test.getQuestions().size());
+            return test;
 
         } catch (SQLException e) {
             throw new Error(e);
