@@ -39,7 +39,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             String query = "INSERT INTO TEST (TITLE,PASSWORD,DATE,LEVEL,SEMESTER,PASS_MARKS,FULL_MARKS,DURATION,START_TIME,END_TIME) VALUES(?,?,?,?,?,?,?,?,?,?) ";
             PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, test.getTitle());
-            ps.setString(2,test.getPassword());
+            ps.setString(2, test.getPassword());
             ps.setDate(3, test.getDate());
             ps.setInt(4, test.getLevel());
             ps.setInt(5, test.getSemester());
@@ -64,7 +64,6 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                     saveQuestion(testId, value);
                 });
 
-//                saveQuestion(testId, test);
             } else {
                 throw new SQLException("Creating test failed, no ID obtained.");
             }
@@ -264,8 +263,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
                 while (rsa.next()) {
                     System.out.println("answer ran");
-                    q.addAnswer(new Answer(rsa.getString("title"), rsa.getBoolean("correct_status")));
-
+                    q.addAnswer(new Answer(rsa.getInt("AID"), rsa.getString("title"), rsa.getBoolean("correct_status")));
                 }
 
                 test.pushQuestion(q);
@@ -275,6 +273,102 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
         } catch (SQLException e) {
             throw new Error(e);
+        }
+    }
+
+    @Override
+    public void updateTest(Test test) throws RemoteException {
+        try {
+
+            String query = "UPDATE TEST SET TITLE= ?,PASSWORD=?,DATE=?,LEVEL=?,SEMESTER=?,PASS_MARKS=?,FULL_MARKS=?,DURATION=?,START_TIME=?,END_TIME=? WHERE TID=? ";
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setString(1, test.getTitle());
+            ps.setString(2, test.getPassword());
+            ps.setDate(3, test.getDate());
+            ps.setInt(4, test.getLevel());
+            ps.setInt(5, test.getSemester());
+            ps.setInt(6, test.getPassMarks());
+            ps.setInt(7, test.getFullMarks());
+            ps.setInt(8, test.getDuration());
+            ps.setTime(9, test.getStartTime());
+            ps.setTime(10, test.getEndTime());
+            ps.setInt(11, test.getId());
+
+            int createdRows = ps.executeUpdate();
+
+            if (createdRows == 0) {
+                throw new SQLException("Creating test failed, no rows created.");
+            }
+
+            ArrayList<Question> questions = test.getQuestions();
+            System.out.println(questions.size());
+            System.out.println("updated test");
+            String removeQuery = "DELETE FROM question WHERE test_id=?";
+            PreparedStatement pss = cn.prepareStatement(removeQuery);
+            pss.setInt(1, test.getId());
+            System.out.println(pss.executeUpdate() + "removed");
+            for (Question value : questions) {
+                System.out.println(questions.size());
+//                if (questions.size() > 1 && value.getId() != null) {
+//                    removeQuery += value.getId() + ",";
+//                }
+//                saveQuestion(test.getId(), value);
+                updateQuestion(test.getId(), value);
+
+            }
+
+//            questions.forEach((value) -> {
+//              
+//                
+//            });
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+
+    private void updateQuestion(int testId, Question question) {
+        try {
+
+            if (question.getId() == null) {
+                saveQuestion(testId, question);
+                System.out.println("added new question from update");
+            } else {
+                String query = "INSERT INTO question (TITLE,MARKS,TEST_ID,QID) VALUES(?,?,?,?)";
+                PreparedStatement ps = cn.prepareStatement(query);
+                ps.setString(1, question.getTitle());
+                ps.setInt(2, question.getMarks());
+                ps.setInt(3, testId);
+                ps.setInt(4, question.getId());
+                ps.executeUpdate();
+
+                String deleteQuery = "DELETE FROM answer WHERE question_id=?";
+                PreparedStatement psdt = cn.prepareStatement(deleteQuery);
+                psdt.setInt(1, question.getId());
+                psdt.executeUpdate();
+
+                String newAnswerQuery = "INSERT INTO answer (TITLE,CORRECT_STATUS,QUESTION_ID) VALUES(?,?,?)";
+                PreparedStatement pmt = cn.prepareStatement(newAnswerQuery);
+
+                ArrayList<Answer> answers = question.getAnswers();
+                answers.forEach((answer) -> {
+                    System.out.println("item");
+                    try {
+
+                        pmt.setString(1, answer.getTitle());
+                        pmt.setBoolean(2, answer.getCorrectAnswer());
+                        pmt.setInt(3, question.getId());
+                        pmt.addBatch();
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                pmt.executeBatch();
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

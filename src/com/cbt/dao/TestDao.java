@@ -21,6 +21,8 @@ import java.util.ArrayList;
 public interface TestDao extends java.rmi.Remote {
 
     public void saveTest(Test test) throws RemoteException;
+    
+    public void updateTest(Test test ) throws RemoteException;
 
     public void removeTest(int testId) throws RemoteException;
 
