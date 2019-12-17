@@ -5,9 +5,11 @@
         <group>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/Test.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/User.java</file>
-            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/utils/DbConnection.java</file>
-            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/TestDao.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/Question.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/Result.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/TestDaoImpl.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/UserDao.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/bll/ResultItem.java</file>
         </group>
     </open-files>
 </project-private>

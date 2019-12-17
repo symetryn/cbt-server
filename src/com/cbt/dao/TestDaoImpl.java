@@ -2,6 +2,8 @@ package com.cbt.dao;
 
 import com.cbt.bll.Answer;
 import com.cbt.bll.Question;
+import com.cbt.bll.Result;
+import com.cbt.bll.ResultItem;
 import com.cbt.bll.Test;
 import com.cbt.utils.DbConnection;
 import com.mysql.jdbc.Statement;
@@ -125,11 +127,6 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     @Override
     public void removeTest(int testId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void getAllQuestions(int tId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -414,6 +411,60 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    @Override
+    public void saveResult(Result result) throws RemoteException {
+        try {
+            System.out.print("result Saved");
+            String query = "INSERT INTO RESULT (test_id,user_id,marks,status) VALUES(?,?,?,?) ";
+            PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, result.getTestId());
+            ps.setInt(2, result.getUserId());
+            ps.setInt(3, result.getMarks());
+            ps.setBoolean(4, result.getStatus());
+
+            int createdRows = ps.executeUpdate();
+
+            if (createdRows == 0) {
+                throw new SQLException("Creating test failed, no rows created.");
+            }
+
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int resultId = generatedKeys.getInt(1);
+                System.out.println("generated result id " + resultId);
+                ArrayList<ResultItem> results = result.getResultItem();
+
+                String resultQuery = "INSERT INTO result_item (QUESTION_ID,CORRECT_ANSWER,SELECTED_ANSWER,CORRECT,RESULT_ID) VALUES(?,?,?,?,?)";
+                PreparedStatement psmt = cn.prepareStatement(resultQuery);
+
+                results.forEach((resultItem) -> {
+                    try {
+                        psmt.setInt(1, resultItem.getQuestionId());
+                        psmt.setString(2, resultItem.getCorrectAnswer());
+                        psmt.setString(3, resultItem.getSelectedAnswer());
+                        psmt.setBoolean(4, resultItem.getCorrect());
+                        psmt.setInt(5, resultId);
+                        psmt.addBatch();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                psmt.executeBatch();
+
+            } else {
+                throw new SQLException("Creating test failed, no ID obtained.");
+            }
+
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public void getResultsById(int resultId) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
