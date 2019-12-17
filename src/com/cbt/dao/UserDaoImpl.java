@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +28,7 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     @Override
-    public String validateLogin(String Username, String Password) {
+    public User validateLogin(String Username, String Password) {
         try {
             System.out.print("print called");
             String query = "SELECT * FROM USERS WHERE UID=? AND PASSWORD=?";
@@ -35,15 +37,22 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             ps.setString(2, Password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                String role = rs.getString("role");
-                return role;
-            } else {
-                return "invalid";
+                User u = new User();
+                u.setEmail(rs.getString("email"));
+                u.setFirstName(rs.getString("firstname"));
+                u.setLastName(rs.getString("lastname"));
+                u.setLevel(rs.getInt("level"));
+                u.setSemester(rs.getInt("semester"));
+                u.setUserID(rs.getInt("UID"));
+                u.setRole(rs.getString("role"));
+
+                return u;
             }
 
-        } catch (SQLException e) {
-            throw new Error(e);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
@@ -64,8 +73,8 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
             ps.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new Error(e);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

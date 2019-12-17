@@ -217,13 +217,11 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     @Override
     public Test getTest(int testId) throws RemoteException {
         try {
-            final int LIMIT = 8;
-            System.out.print("print called");
-            String query = "SELECT * FROM TEST WHERE TID= ? LIMIT ?";
+
+            String query = "SELECT * FROM TEST WHERE TID= ?";
             PreparedStatement ps = cn.prepareStatement(query);
 
             ps.setInt(1, testId);
-            ps.setInt(2, LIMIT);
 
             ResultSet rs = ps.executeQuery();
 
@@ -370,6 +368,52 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         } catch (SQLException ex) {
             Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public ArrayList<Test> getTestByLevelSem(int level, int semester) throws RemoteException {
+
+        try {
+            String query = "SELECT * FROM TEST WHERE status=? AND level=? AND semester=?";
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setString(1, "active");
+            ps.setInt(2, level);
+            ps.setInt(3, semester);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Test> testList = new ArrayList();
+            while (rs.next()) {
+                Test t = new Test();
+                t.setId(rs.getInt("TID"));
+                t.setTitle(rs.getString("title"));
+                t.setDate(rs.getDate("date"));
+                testList.add(t);
+
+            }
+            return testList;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean verifyPassword(int testId, String password) throws RemoteException {
+        try {
+            String query = "SELECT * FROM TEST WHERE TID=? AND password=? ";
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setInt(1, testId);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
 }

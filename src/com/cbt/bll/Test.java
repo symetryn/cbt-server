@@ -143,4 +143,11 @@ public class Test implements Serializable {
         this.fullMarks = fullMarks;
     }
 
+    @Override
+    public String toString() {
+
+        return "Questions " + questions.toString();
+
+    }
+
 }
