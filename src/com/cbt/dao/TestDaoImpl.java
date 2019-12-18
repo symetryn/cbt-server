@@ -30,10 +30,18 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     Connection cn = DbConnection.myConnection();
 
+    /**
+     *
+     * @throws RemoteException
+     */
     public TestDaoImpl() throws RemoteException {
         super();
     }
 
+    /**
+     *
+     * @param test
+     */
     @Override
     public void saveTest(Test test) {
         try {
@@ -125,11 +133,19 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
+    /**
+     *
+     * @param testId
+     */
     @Override
     public void removeTest(int testId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @return @throws RemoteException
+     */
     @Override
     public ArrayList<Test> getAllTest() throws RemoteException {
         try {
@@ -157,6 +173,10 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 //    @Override
 //    public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
 //    }
+    /**
+     *
+     * @return @throws RemoteException
+     */
     @Override
     public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
         try {
@@ -183,6 +203,12 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
+    /**
+     *
+     * @param searchQuery
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<Test> getTestSearch(String searchQuery) throws RemoteException {
         try {
@@ -211,6 +237,12 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
+    /**
+     *
+     * @param testId
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public Test getTest(int testId) throws RemoteException {
         try {
@@ -271,6 +303,11 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
+    /**
+     *
+     * @param test
+     * @throws RemoteException
+     */
     @Override
     public void updateTest(Test test) throws RemoteException {
         try {
@@ -367,6 +404,13 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
+    /**
+     *
+     * @param level
+     * @param semester
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<Test> getTestByLevelSem(int level, int semester) throws RemoteException {
 
@@ -394,6 +438,13 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         return null;
     }
 
+    /**
+     *
+     * @param testId
+     * @param password
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public Boolean verifyPassword(int testId, String password) throws RemoteException {
         try {
@@ -413,8 +464,14 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         return false;
     }
 
+    /**
+     *
+     * @param result
+     * @return generated result Id
+     * @throws RemoteException
+     */
     @Override
-    public void saveResult(Result result) throws RemoteException {
+    public Integer saveResult(Result result) throws RemoteException {
         try {
             System.out.print("result Saved");
             String query = "INSERT INTO RESULT (test_id,user_id,marks,status) VALUES(?,?,?,?) ";
@@ -452,6 +509,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                     }
                 });
                 psmt.executeBatch();
+                return resultId;
 
             } else {
                 throw new SQLException("Creating test failed, no ID obtained.");
@@ -462,9 +520,70 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
+    /**
+     *
+     * @param resultId
+     * @return
+     * @throws RemoteException
+     */
     @Override
-    public void getResultsById(int resultId) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Result getResult(int resultId) throws RemoteException {
+        try {
+            Result result = new Result();
+            Test test = new Test();
+            ArrayList<ResultItem> resultItems = new ArrayList<>();
+
+            String resultQuery = "SELECT * FROM RESULT"
+                    + " INNER JOIN TEST"
+                    + " ON test.TID = result.test_id"
+                    + " WHERE RID=?";
+            PreparedStatement psmt = cn.prepareStatement(resultQuery);
+            psmt.setInt(1, resultId);
+
+            ResultSet rs = psmt.executeQuery();
+            if (rs.next()) {
+                result.setId(resultId);
+                result.setMarks(rs.getInt("marks"));
+                result.setStatus(rs.getBoolean("status"));
+                test.setId(rs.getInt("TID"));
+                test.setTitle(rs.getString("title"));
+                test.setDate(rs.getDate("date"));
+                test.setStartTime(rs.getTime("start_time"));
+                test.setEndTime(rs.getTime("end_time"));
+                test.setLevel(rs.getInt("level"));
+                test.setSemester(rs.getInt("semester"));
+                test.setPassword(rs.getString("password"));
+                test.setDuration(rs.getInt("duration"));
+                test.setPassMarks(rs.getInt("pass_marks"));
+                test.setFullMarks(rs.getInt("full_marks"));
+                result.setTest(test);
+            }
+
+            String resultItemsQuery = "SELECT *"
+                    + "FROM question "
+                    + "INNER JOIN result_item "
+                    + "ON result_item.question_id =question.QID "
+                    + "WHERE result_id=?";
+            PreparedStatement ps = cn.prepareStatement(resultItemsQuery);
+            ps.setInt(1, resultId);
+            ResultSet rslt = ps.executeQuery();
+
+            while (rslt.next()) {
+                Question q = new Question();
+                q.setTitle(rslt.getString("title"));
+                q.setMarks(rslt.getInt("marks"));
+                q.setId(rslt.getInt("QID"));
+                resultItems.add(new ResultItem(resultId, rslt.getString("correct_answer"), rslt.getString("selected_answer"), rslt.getBoolean("correct"), q));
+            }
+            result.setResultItem(resultItems);
+            System.out.println(result.toString());
+            return result;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 
 }
