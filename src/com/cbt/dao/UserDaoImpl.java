@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.cbt.dao;
 
 import com.cbt.model.User;
@@ -23,10 +19,20 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     Connection cn = DbConnection.myConnection();
 
+    /**
+     *
+     * @throws RemoteException
+     */
     public UserDaoImpl() throws RemoteException {
         super();
     }
 
+    /**
+     * validate the user credentials and returns object of the user
+     * @param Username value of username to validate
+     * @param Password value of password to validate
+     * @return the object of the User
+     */
     @Override
     public User validateLogin(String Username, String Password) {
         try {
@@ -55,6 +61,11 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         return null;
     }
 
+    /**
+     * Register the new user and save the user credentials into Users table
+     * @param user Object4 of the User
+     * @throws RemoteException
+     */
     @Override
     public void registerUser(User user) throws RemoteException {
         try {

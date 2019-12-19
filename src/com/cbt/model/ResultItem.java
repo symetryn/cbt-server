@@ -30,6 +30,14 @@ public class ResultItem implements Serializable {
         this.correct = correct;
     }
 
+    /**
+     *
+     * @param questionId
+     * @param correctAnswer
+     * @param selectedAnswer
+     * @param correct
+     * @param question
+     */
     public ResultItem(Integer questionId, String correctAnswer, String selectedAnswer, Boolean correct, Question question) {
         this.questionId = questionId;
         this.correctAnswer = correctAnswer;
