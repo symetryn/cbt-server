@@ -1,11 +1,11 @@
 package com.cbt.dao;
 
-import com.cbt.bll.Answer;
-import com.cbt.bll.Question;
-import com.cbt.bll.Result;
-import com.cbt.bll.ResultItem;
-import com.cbt.bll.Test;
-import com.cbt.bll.User;
+import com.cbt.model.Answer;
+import com.cbt.model.Question;
+import com.cbt.model.Result;
+import com.cbt.model.ResultItem;
+import com.cbt.model.Test;
+import com.cbt.model.User;
 import com.cbt.utils.DbConnection;
 import com.mysql.jdbc.Statement;
 import java.rmi.RemoteException;
