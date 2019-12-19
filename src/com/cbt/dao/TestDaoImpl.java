@@ -39,8 +39,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param test
+     * Save the test into the test,question and answer tables
+     * @param test: Object of the test
      */
     @Override
     public void saveTest(Test test) {
@@ -134,7 +134,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
+     * Remove the test with reference to testId
      * @param testId
      */
     @Override
@@ -143,8 +143,9 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @return @throws RemoteException
+     * Get all test from the Test table
+     * @return all the test in the arraylist of Test object
+     * @throws RemoteException
      */
     @Override
     public ArrayList<Test> getAllTest() throws RemoteException {
@@ -170,12 +171,11 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
-//    @Override
-//    public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
-//    }
+
     /**
-     *
-     * @return @throws RemoteException
+     * Get all the upcoming test from test table with reference to current date
+     * @return all the upcoming test in the arraylist of Test object
+     * @throws RemoteException
      */
     @Override
     public ArrayList<Test> getAllUpcomingTest() throws RemoteException {
@@ -204,9 +204,9 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param searchQuery
-     * @return
+     * Get the searched test from the test table with reference to value in search bar
+     * @param searchQuery searched value in search bar
+     * @return the search result in the arraylist of Test object
      * @throws RemoteException
      */
     @Override
@@ -238,9 +238,9 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param testId
-     * @return
+     * Get the specific test from Test table with reference to testId
+     * @param testId value of the testId
+     * @return returns the specific test with reference to testId
      * @throws RemoteException
      */
     @Override
@@ -304,8 +304,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param test
+     * Update the various attributes of the Test table
+     * @param test Object of the Test
      * @throws RemoteException
      */
     @Override
@@ -405,10 +405,10 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param level
-     * @param semester
-     * @return
+     * Get the test by level and semester from test table
+     * @param level value of the specific level
+     * @param semester value of the specific semester
+     * @return  the available Test with reference to level and semester in the arraylist of Test object
      * @throws RemoteException
      */
     @Override
@@ -439,10 +439,10 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param testId
-     * @param password
-     * @return
+     * verify the password of the test before accessing it
+     * @param testId value of the testId
+     * @param password password of specific test to be inserted
+     * @return return the boolean value as a result
      * @throws RemoteException
      */
     @Override
@@ -465,8 +465,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param result
+     * Save the result into result and resultItem table
+     * @param result Object of result
      * @return generated result Id
      * @throws RemoteException
      */
@@ -521,9 +521,9 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     *
-     * @param resultId
-     * @return
+     * Get the result with test object
+     * @param resultId value of the resultId
+     * @return result with reference to resultId
      * @throws RemoteException
      */
     @Override

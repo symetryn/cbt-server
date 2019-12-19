@@ -22,46 +22,89 @@ public class Question implements Serializable {
     private int marks;
     private ArrayList<Answer> answers;
 
+    /**
+     *
+     */
     public Question() {
         answers = new ArrayList();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     *
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Answer> getAnswers() {
         return answers;
     }
 
+    /**
+     *
+     * @param answers
+     */
     public void setAnswers(ArrayList<Answer> answers) {
         this.answers = answers;
     }
 
+    /**
+     *
+     * @param a
+     */
     public void addAnswer(Answer a) {
         this.answers.add(a);
     }
 
+    /**
+     *
+     * @param index
+     */
     public void removeAnswer(int index) {
         this.answers.remove(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMarks() {
         return marks;
     }
 
+    /**
+     *
+     * @param marks
+     */
     public void setMarks(int marks) {
         this.marks = marks;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(Integer id) {
         this.id = id;
     }
