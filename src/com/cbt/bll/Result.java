@@ -23,6 +23,7 @@ public class Result implements Serializable {
     private Boolean status;
     private ArrayList<ResultItem> resultItem;
     private Test test;
+    private User user;
 
     /**
      *
@@ -177,10 +178,21 @@ public class Result implements Serializable {
         this.test = test;
     }
 
+<<<<<<< HEAD
     /**
      *
      * @return
      */
+=======
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+>>>>>>> eb36452d0b753a19129cdb106a2d259424cd21c2
     @Override
     public String toString() {
         Gson g = new Gson();

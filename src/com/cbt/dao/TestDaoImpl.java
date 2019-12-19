@@ -5,6 +5,7 @@ import com.cbt.bll.Question;
 import com.cbt.bll.Result;
 import com.cbt.bll.ResultItem;
 import com.cbt.bll.Test;
+import com.cbt.bll.User;
 import com.cbt.utils.DbConnection;
 import com.mysql.jdbc.Statement;
 import java.rmi.RemoteException;
@@ -413,7 +414,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
      */
     @Override
     public ArrayList<Test> getTestByLevelSem(int level, int semester) throws RemoteException {
-
+        ArrayList<Test> testList = new ArrayList();
         try {
             String query = "SELECT * FROM TEST WHERE status=? AND level=? AND semester=?";
             PreparedStatement ps = cn.prepareStatement(query);
@@ -421,7 +422,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             ps.setInt(2, level);
             ps.setInt(3, semester);
             ResultSet rs = ps.executeQuery();
-            ArrayList<Test> testList = new ArrayList();
+
             while (rs.next()) {
                 Test t = new Test();
                 t.setId(rs.getInt("TID"));
@@ -435,7 +436,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         } catch (SQLException ex) {
             Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     /**
@@ -583,7 +584,90 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return null;
+        return new Result();
+    }
+
+    @Override
+    public ArrayList<Result> getResultByUser(int userId) throws RemoteException {
+        try {
+
+            String resultQuery = "SELECT * FROM RESULT"
+                    + " INNER JOIN TEST"
+                    + " ON test.TID = result.test_id"
+                    + " WHERE user_id=?";
+            PreparedStatement psmt = cn.prepareStatement(resultQuery);
+            int resultId;
+            psmt.setInt(1, userId);
+
+            ResultSet rs = psmt.executeQuery();
+
+            ArrayList<Result> results = new ArrayList<>();
+            while (rs.next()) {
+                Result result = new Result();
+                Test test = new Test();
+                result.setId(rs.getInt("RID"));
+                result.setMarks(rs.getInt("marks"));
+                result.setStatus(rs.getBoolean("status"));
+                test.setId(rs.getInt("TID"));
+                test.setTitle(rs.getString("title"));
+                test.setDate(rs.getDate("date"));
+                test.setStartTime(rs.getTime("start_time"));
+                test.setEndTime(rs.getTime("end_time"));
+                test.setLevel(rs.getInt("level"));
+                test.setSemester(rs.getInt("semester"));
+                test.setPassword(rs.getString("password"));
+                test.setDuration(rs.getInt("duration"));
+                test.setPassMarks(rs.getInt("pass_marks"));
+                test.setFullMarks(rs.getInt("full_marks"));
+                result.setTest(test);
+                results.add(result);
+                result.toString();
+            }
+            return results;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<Result> getAllResult() throws RemoteException {
+        try {
+            String query = "SELECT * FROM RESULT INNER JOIN USERS ON result.user_id = users.UID INNER JOIN Test ON result.test_id = test.TID";
+
+            PreparedStatement psmt = cn.prepareStatement(query);
+
+            ResultSet rs = psmt.executeQuery();
+
+            ArrayList<Result> results = new ArrayList<>();
+            while (rs.next()) {
+                Result result = new Result();
+                Test test = new Test();
+                result.setId(rs.getInt("RID"));
+                result.setMarks(rs.getInt("marks"));
+                result.setStatus(rs.getBoolean("status"));
+                User u = new User();
+                u.setEmail(rs.getString("email"));
+                u.setFirstName(rs.getString("firstname"));
+                u.setLastName(rs.getString("lastname"));
+                u.setLevel(rs.getInt("level"));
+                u.setSemester(rs.getInt("semester"));
+                u.setUserID(rs.getInt("UID"));
+                u.setRole(rs.getString("role"));
+                Test t = new Test();
+                t.setTitle(rs.getString("title"));
+                result.setUser(u);
+                result.setTest(t);
+                results.add(result);
+            }
+            return results;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return new ArrayList<>();
+
     }
 
 }
