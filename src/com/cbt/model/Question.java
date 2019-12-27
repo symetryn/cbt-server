@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 3L;
-
+    
     private Integer id;
     private String title;
     private int marks;

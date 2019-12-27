@@ -20,6 +20,7 @@ public class CBTServer {
 
     /**
      * @param args the command line arguments
+     * RMI
      */
     public static void main(String[] args) {
         try {

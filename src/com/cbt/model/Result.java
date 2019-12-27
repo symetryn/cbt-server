@@ -33,7 +33,7 @@ public class Result implements Serializable {
     }
 
     /**
-     *
+     * Overloaded constructor showing polymorphism
      * @param id
      * @param testId
      * @param userId
@@ -50,140 +50,85 @@ public class Result implements Serializable {
         this.resultItem = resultItem;
     }
 
-    /**
-     *
-     * @return
-     */
+    //getters and setters
     public int getId() {
         return id;
     }
 
-    /**
-     *
-     * @param id
-     */
+  
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     *
-     * @return
-     */
+    
     public int getTestId() {
         return testId;
     }
 
-    /**
-     *
-     * @param testId
-     */
+   
     public void setTestId(int testId) {
         this.testId = testId;
     }
 
-    /**
-     *
-     * @return
-     */
+    
     public int getUserId() {
         return userId;
     }
 
-    /**
-     *
-     * @param userId
-     */
+  
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    /**
-     *
-     * @return
-     */
+    
     public int getMarks() {
         return marks;
     }
 
-    /**
-     *
-     * @param marks
-     */
+    
     public void setMarks(int marks) {
         this.marks = marks;
     }
 
-    /**
-     *
-     * @return
-     */
+    
     public Boolean getStatus() {
         return status;
     }
 
-    /**
-     *
-     * @param status
-     */
     public void setStatus(Boolean status) {
         this.status = status;
     }
 
-    /**
-     *
-     * @return
-     */
+  
     public ArrayList<ResultItem> getResultItem() {
         return resultItem;
     }
 
-    /**
-     *
-     * @param resultItem
-     */
+   
     public void setResultItem(ArrayList<ResultItem> resultItem) {
         this.resultItem = resultItem;
     }
 
-    /**
-     *
-     * @param r
-     */
+   
     public void pushResultItem(ResultItem r) {
         resultItem.add(r);
     }
 
-    /**
-     *
-     * @param i
-     */
+    
     public void addMarks(Integer i) {
         this.marks += i;
     }
 
-    /**
-     *
-     * @return
-     */
+   
     public Test getTest() {
         return test;
     }
 
-    /**
-     *
-     * @param test
-     */
+   
     public void setTest(Test test) {
         this.test = test;
     }
 
-<<<<<<< HEAD
-    /**
-     *
-     * @return
-     */
-=======
     public User getUser() {
         return user;
     }
@@ -192,7 +137,7 @@ public class Result implements Serializable {
         this.user = user;
     }
 
->>>>>>> eb36452d0b753a19129cdb106a2d259424cd21c2
+    
     @Override
     public String toString() {
         Gson g = new Gson();

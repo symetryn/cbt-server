@@ -41,6 +41,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Save the test into the test,question and answer tables
+     *
      * @param test: Object of the test
      */
     @Override
@@ -136,6 +137,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Remove the test with reference to testId
+     *
      * @param testId
      */
     @Override
@@ -145,6 +147,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Get all test from the Test table
+     *
      * @return all the test in the arraylist of Test object
      * @throws RemoteException
      */
@@ -172,9 +175,9 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
-
     /**
      * Get all the upcoming test from test table with reference to current date
+     *
      * @return all the upcoming test in the arraylist of Test object
      * @throws RemoteException
      */
@@ -205,7 +208,9 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     * Get the searched test from the test table with reference to value in search bar
+     * Get the searched test from the test table with reference to value in
+     * search bar
+     *
      * @param searchQuery searched value in search bar
      * @return the search result in the arraylist of Test object
      * @throws RemoteException
@@ -240,6 +245,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Get the specific test from Test table with reference to testId
+     *
      * @param testId value of the testId
      * @return returns the specific test with reference to testId
      * @throws RemoteException
@@ -306,6 +312,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Update the various attributes of the Test table
+     *
      * @param test Object of the Test
      * @throws RemoteException
      */
@@ -407,18 +414,20 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Get the test by level and semester from test table
+     *
      * @param level value of the specific level
      * @param semester value of the specific semester
-     * @return  the available Test with reference to level and semester in the arraylist of Test object
+     * @return the available Test with reference to level and semester in the
+     * arraylist of Test object
      * @throws RemoteException
      */
     @Override
-    public ArrayList<Test> getTestByLevelSem(int level, int semester) throws RemoteException {
+    public ArrayList<Test> getTestByLevelSem(int userId, int level, int semester) throws RemoteException {
         ArrayList<Test> testList = new ArrayList();
         try {
-            String query = "SELECT * FROM TEST WHERE status=? AND level=? AND semester=?";
+            String query = "SELECT * from test WHERE test.TID NOT IN (SELECT result.test_id FROM result WHERE result.user_id=? ) AND level=? AND semester=?  AND test.date>=CURDATE()";
             PreparedStatement ps = cn.prepareStatement(query);
-            ps.setString(1, "active");
+            ps.setInt(1, userId);
             ps.setInt(2, level);
             ps.setInt(3, semester);
             ResultSet rs = ps.executeQuery();
@@ -441,6 +450,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * verify the password of the test before accessing it
+     *
      * @param testId value of the testId
      * @param password password of specific test to be inserted
      * @return return the boolean value as a result
@@ -467,6 +477,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Save the result into result and resultItem table
+     *
      * @param result Object of result
      * @return generated result Id
      * @throws RemoteException
@@ -523,6 +534,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Get the result with test object
+     *
      * @param resultId value of the resultId
      * @return result with reference to resultId
      * @throws RemoteException
@@ -656,7 +668,17 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 u.setUserID(rs.getInt("UID"));
                 u.setRole(rs.getString("role"));
                 Test t = new Test();
+                t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));
+                t.setDate(rs.getDate("date"));
+                t.setStartTime(rs.getTime("start_time"));
+                t.setEndTime(rs.getTime("end_time"));
+                t.setLevel(rs.getInt("level"));
+                t.setSemester(rs.getInt("semester"));
+                t.setPassword(rs.getString("password"));
+                t.setDuration(rs.getInt("duration"));
+                t.setPassMarks(rs.getInt("pass_marks"));
+                t.setFullMarks(rs.getInt("full_marks"));
                 result.setUser(u);
                 result.setTest(t);
                 results.add(result);
@@ -666,7 +688,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         } catch (SQLException ex) {
             Logger.getLogger(TestDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return new ArrayList<>();
+        return new ArrayList<>();
 
     }
 
