@@ -142,7 +142,19 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
      */
     @Override
     public void removeTest(int testId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            System.out.print("print called");
+            String query = "DELETE FROM TEST WHERE TID=?";
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setInt(1, testId);
+            int rs = ps.executeUpdate();
+            if (rs == 0) {
+                throw new SQLException("test doesnot exist");
+            }
+
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
     }
 
     /**
@@ -512,7 +524,13 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                     try {
                         psmt.setInt(1, resultItem.getQuestionId());
                         psmt.setString(2, resultItem.getCorrectAnswer());
-                        psmt.setString(3, resultItem.getSelectedAnswer());
+                        
+                        if (resultItem.getSelectedAnswer() != null) {
+                            psmt.setString(3, resultItem.getSelectedAnswer());
+                        }
+                        else{
+                            psmt.setString(3, "none");
+                        }
                         psmt.setBoolean(4, resultItem.getCorrect());
                         psmt.setInt(5, resultId);
                         psmt.addBatch();

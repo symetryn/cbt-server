@@ -82,7 +82,8 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             ps.setInt(7, user.getLevel());
             ps.setInt(8, user.getSemester());
 
-            ps.executeUpdate();
+            int rows=ps.executeUpdate();
+           
 
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
