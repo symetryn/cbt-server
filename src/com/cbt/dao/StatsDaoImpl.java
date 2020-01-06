@@ -2,6 +2,7 @@ package com.cbt.dao;
 
 import com.cbt.model.ChartItem;
 import com.cbt.model.StatItem;
+import com.cbt.model.User;
 import com.cbt.utils.DbConnection;
 import java.rmi.RemoteException;
 import java.sql.Connection;
@@ -140,7 +141,7 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
 //        }
 //    }
     @Override
-    public ArrayList<ChartItem> getTopStudents() throws RemoteException {
+    public ArrayList<User> getTopStudents() throws RemoteException {
         try {
             System.out.print("Test Saved");
             String query = "SELECT a.firstname,a.lastname, COUNT(a.UID)total, "
@@ -151,10 +152,14 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
                     + "order by correct_percent desc";
             PreparedStatement ps = cn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            ArrayList<ChartItem> chartList = new ArrayList();
+            ArrayList<User> chartList = new ArrayList();
+
             while (rs.next()) {
-                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
-                chartList.add(c);
+                User u = new User();
+                u.setFirstName(rs.getString(1));
+                u.setLastName(rs.getString(2));
+                u.setLevel(rs.getInt(4));
+                chartList.add(u);
             }
 
             return chartList;
@@ -180,7 +185,104 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
 //         new Integer[]{rs.getInt(3)};
             }
             ArrayList<ChartItem> chartList = new ArrayList<>();
-            chartList.add(new ChartItem(new String[]{"Pass Percentage"}, valueList.toArray(new Integer[chartList.size()]), null,null));
+            chartList.add(new ChartItem(new String[]{"Pass Percentage"}, valueList.toArray(new Integer[chartList.size()]), null, null));
+
+            StatItem stat = new StatItem(labelList.toArray(new String[labelList.size()]), chartList);
+
+            return stat;
+        } catch (SQLException ex) {
+            Logger.getLogger(StatsDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<ChartItem> getPassCount(int userId) throws RemoteException {
+        try {
+            String query = "SELECT COUNT(*) FROM RESULT WHERE user_id=? AND status=1";
+
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<ChartItem> chartList = new ArrayList();
+            if (rs.next()) {
+                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
+
+                chartList.add(c);
+                return chartList;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(StatsDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<ChartItem> getFailedCount(int userId) throws RemoteException {
+        try {
+            String query = "SELECT COUNT(*) FROM RESULT WHERE user_id=? and status=0 ";
+
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<ChartItem> chartList = new ArrayList();
+            if (rs.next()) {
+                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
+
+                chartList.add(c);
+                return chartList;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(StatsDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<ChartItem> getTotalCount(int userId) throws RemoteException {
+        try {
+            System.out.println(userId);
+            String query = "SELECT COUNT(*) FROM RESULT WHERE user_id=? ";
+
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<ChartItem> chartList = new ArrayList();
+            if (rs.next()) {
+
+                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
+
+                System.out.println(c.toString());
+                chartList.add(c);
+
+                return chartList;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(StatsDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public StatItem getUserTestData(int userId) throws RemoteException {
+        try {
+            String query = "SELECT t.title,  ( ( r.marks * 100 ) /(t.full_marks) ) AS correct_percent FROM result r  LEFT JOIN test t ON (t.TID = r.test_Id) where user_id=?";
+            PreparedStatement ps = cn.prepareStatement(query);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Integer> valueList = new ArrayList();
+            ArrayList<String> labelList = new ArrayList();
+
+            while (rs.next()) {
+                labelList.add(rs.getString(1));
+
+                valueList.add(rs.getInt(2));
+            }
+            ArrayList<ChartItem> chartList = new ArrayList<>();
+            chartList.add(new ChartItem(new String[]{"Recent Exam Percentages"}, valueList.toArray(new Integer[chartList.size()]), false, "red"));
 
             StatItem stat = new StatItem(labelList.toArray(new String[labelList.size()]), chartList);
 

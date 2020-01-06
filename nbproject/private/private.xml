@@ -7,11 +7,11 @@
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/StatsDaoImpl.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/UserDaoImpl.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/StatsDao.java</file>
-            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/model/StatItem.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/model/Test.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/model/Answer.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/utils/DbConnection.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/TestDao.java</file>
+            <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/TestDaoImpl.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/model/Result.java</file>
             <file>file:/C:/Users/Symetryn/Documents/NetBeansProjects/CBTServer/src/com/cbt/dao/UserDao.java</file>
         </group>
