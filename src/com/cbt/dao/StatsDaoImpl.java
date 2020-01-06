@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 /**
  *
- * @author Symetryn
+ * 
  */
 public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements StatsDao {
 

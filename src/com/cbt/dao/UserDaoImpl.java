@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Symetryn
+ * 
  */
 public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements UserDao {
 
