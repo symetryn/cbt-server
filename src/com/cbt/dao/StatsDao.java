@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
- *
+ * Interface defining method for getting different info to depict it chart form
  * @author Symetryn
  */
 public interface StatsDao extends java.rmi.Remote {

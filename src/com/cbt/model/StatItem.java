@@ -28,7 +28,7 @@ public class StatItem implements Serializable {
     }
     
     
-
+//Getter and setter method for stat item
     public ArrayList<ChartItem> getChartList() {
         return chartList;
     }

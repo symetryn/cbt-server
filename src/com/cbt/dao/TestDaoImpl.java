@@ -26,13 +26,14 @@ import java.util.logging.Logger;
 /**
  *
  * 
+ * @author Dhruba
  */
 public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements TestDao {
 
     Connection cn = DbConnection.myConnection();
 
     /**
-     *
+     * Initializing constructor of base class
      * @throws RemoteException
      */
     public TestDaoImpl() throws RemoteException {
@@ -427,6 +428,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     /**
      * Get the test by level and semester from test table
      *
+     * @param userId
      * @param level value of the specific level
      * @param semester value of the specific semester
      * @return the available Test with reference to level and semester in the
@@ -617,6 +619,12 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         return new Result();
     }
 
+    /**
+     * Get the result of the user with reference to userID
+     * @param userId id of the student to view their respective result
+     * @return result arraylist of the user
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<Result> getResultByUser(int userId) throws RemoteException {
         try {
@@ -661,6 +669,11 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         return new ArrayList<>();
     }
 
+    /**
+     *To get all the result
+     * @return arraylist of all the students
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<Result> getAllResult() throws RemoteException {
         try {

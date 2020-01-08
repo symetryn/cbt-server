@@ -10,24 +10,29 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
- * @author Symetryn
+ * Overloaded constructor showing polymorphism
  */
-public class ChartItem implements Serializable{
+public class ChartItem implements Serializable {
 
     String[] label;
     Integer[] data;
     Boolean fill;
     String borderColor;
     String backgroundColor;
-    
-     private static final long serialVersionUID = 5L;
 
+    private static final long serialVersionUID = 5L;
+
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public ChartItem(Integer[] data, String backgroundColor) {
         this.data = data;
         this.backgroundColor = backgroundColor;
     }
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public ChartItem(String[] label, Integer[] data, Boolean fill, String borderColor) {
         this.label = label;
         this.data = data;
@@ -35,6 +40,9 @@ public class ChartItem implements Serializable{
         this.borderColor = borderColor;
     }
 
+    /**
+     * Overriding the toString methods
+     */
     @Override
     public String toString() {
         Gson gson = new Gson();

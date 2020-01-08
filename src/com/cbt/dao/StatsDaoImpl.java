@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 /**
  *
  * 
+ * @author Dhruba
  */
 public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements StatsDao {
 
@@ -36,6 +37,11 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         super();
     }
 
+    /**
+     * Gives the total students
+     * @return array list of total students
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<ChartItem> getTotalStudents() throws RemoteException {
         try {
@@ -57,6 +63,11 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         }
     }
 
+    /**
+     * to get total exams
+     * @return array list of all exams
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<ChartItem> getTotalExams() throws RemoteException {
         try {
@@ -78,6 +89,11 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         }
     }
 
+    /**
+     * to get the pass rate of the students
+     * @return array list of pass students
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<ChartItem> getPassRate() throws RemoteException {
         try {
@@ -99,6 +115,11 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         }
     }
 
+    /**
+     * to get all the upcoming tests
+     * @return the array list of upcoming test
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<ChartItem> getUpcomingTests() throws RemoteException {
         try {
@@ -140,6 +161,12 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
 //            throw new Error(e);
 //        }
 //    }
+
+    /**
+     * to get top 10 students from overall students
+     * @return the arraylist of top 10 students
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<User> getTopStudents() throws RemoteException {
         try {
@@ -169,6 +196,11 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         }
     }
 
+    /**
+     * stats for pass percentage in the test
+     * @return StatItem of test
+     * @throws RemoteException
+     */
     @Override
     public StatItem getTestsData() throws RemoteException {
         try {
@@ -196,6 +228,12 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         return null;
     }
 
+    /**
+     * to get the pass count of the student
+     * @param userId 
+     * @return array list of total pass student
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<ChartItem> getPassCount(int userId) throws RemoteException {
         try {
@@ -218,6 +256,12 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         return null;
     }
 
+    /**
+     * to get the failed count of the user
+     * @param userId gives the total count of the failed result for particular id
+     * @return array list for total fail
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<ChartItem> getFailedCount(int userId) throws RemoteException {
         try {
@@ -240,6 +284,12 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         return null;
     }
 
+    /**
+     * To give the total count of result for user
+     * @param userId gives the total count of the result for particular id
+     * @return array list for the total count of the result
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<ChartItem> getTotalCount(int userId) throws RemoteException {
         try {
@@ -266,6 +316,12 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         return null;
     }
 
+    /**
+     * to get user test data
+     * @param userId id for which the user test data is required
+     * @return the StatItem to get user test data
+     * @throws RemoteException
+     */
     @Override
     public StatItem getUserTestData(int userId) throws RemoteException {
         try {

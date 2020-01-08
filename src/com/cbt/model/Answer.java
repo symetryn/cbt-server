@@ -8,8 +8,7 @@ package com.cbt.model;
 import java.io.Serializable;
 
 /**
- *
- * @author Symetryn
+ * Overloaded constructor showing polymorphism
  */
 public class Answer implements Serializable {
 
@@ -20,15 +19,13 @@ public class Answer implements Serializable {
     private Integer id;
 
     /**
-     *
+     * Overloaded constructor showing polymorphism
      */
     public Answer() {
     }
 
     /**
-     *
-     * @param title
-     * @param correctAnswer
+     * Overloaded constructor showing polymorphism
      */
     public Answer(String title, boolean correctAnswer) {
         this.title = title;
@@ -37,10 +34,7 @@ public class Answer implements Serializable {
     }
 
     /**
-     *
-     * @param id
-     * @param title
-     * @param correctAnswer
+     * Overloaded constructor showing polymorphism
      */
     public Answer(int id, String title, boolean correctAnswer) {
         this.title = title;
@@ -49,50 +43,27 @@ public class Answer implements Serializable {
 
     }
 
-    /**
-     *
-     * @return
-     */
+// Getters and setters method for Answer model
     public String getTitle() {
         return title;
     }
 
-    /**
-     *
-     * @return
-     */
     public Boolean getCorrectAnswer() {
         return correctAnswer;
     }
 
-    /**
-     *
-     * @param title
-     */
     public void setTitle(String title) {
         this.title = title;
     }
 
-    /**
-     *
-     * @param correctAnswer
-     */
     public void setCorrectAnswer(Boolean correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 
-    /**
-     *
-     * @return
-     */
     public Integer getId() {
         return id;
     }
 
-    /**
-     *
-     * @param id
-     */
     public void setId(Integer id) {
         this.id = id;
     }

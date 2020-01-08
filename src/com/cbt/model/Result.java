@@ -26,7 +26,7 @@ public class Result implements Serializable {
     private User user;
 
     /**
-     *
+     * Initializing the arraylist of result item
      */
     public Result() {
         resultItem = new ArrayList<>();
@@ -34,12 +34,6 @@ public class Result implements Serializable {
 
     /**
      * Overloaded constructor showing polymorphism
-     * @param id
-     * @param testId
-     * @param userId
-     * @param marks
-     * @param status
-     * @param resultItem
      */
     public Result(int id, int testId, int userId, int marks, Boolean status, ArrayList<ResultItem> resultItem) {
         this.id = id;
@@ -50,7 +44,7 @@ public class Result implements Serializable {
         this.resultItem = resultItem;
     }
 
-    //getters and setters
+    //getters and setters for result
     public int getId() {
         return id;
     }

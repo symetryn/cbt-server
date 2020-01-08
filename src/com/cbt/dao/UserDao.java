@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 import java.sql.ResultSet;
 
 /**
- *
+ * Interface defining the method to validate the user
  * @author Symetryn
  */
 public interface UserDao extends java.rmi.Remote {

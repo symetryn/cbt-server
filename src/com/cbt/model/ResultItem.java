@@ -20,9 +20,16 @@ public class ResultItem implements Serializable {
     private Boolean correct;
     private Question question;
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
+
     public ResultItem() {
     }
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public ResultItem(Integer question, String correctAnswer, String selectedAnswer, Boolean correct) {
         this.questionId = question;
         this.correctAnswer = correctAnswer;
@@ -31,13 +38,9 @@ public class ResultItem implements Serializable {
     }
 
     /**
-     *
-     * @param questionId
-     * @param correctAnswer
-     * @param selectedAnswer
-     * @param correct
-     * @param question
+     * Overloaded constructor showing polymorphism
      */
+
     public ResultItem(Integer questionId, String correctAnswer, String selectedAnswer, Boolean correct, Question question) {
         this.questionId = questionId;
         this.correctAnswer = correctAnswer;
@@ -45,6 +48,7 @@ public class ResultItem implements Serializable {
         this.correct = correct;
         this.question = question;
     }
+//Getter and setter method for result item
 
     public Integer getQuestionId() {
         return questionId;

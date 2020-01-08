@@ -34,7 +34,7 @@ public class Test implements Serializable {
     public Test() {
         questions = new ArrayList();
     }
-
+// getter and setter method for test model
     public String getTitle() {
         return title;
     }
