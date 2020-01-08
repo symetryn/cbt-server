@@ -34,7 +34,7 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
             ResultSet rs = ps.executeQuery();
             ArrayList<ChartItem> chartList = new ArrayList();
             if (rs.next()) {
-                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
+                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "maroon");
 
                 chartList.add(c);
                 return chartList;
@@ -71,7 +71,7 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
     public ArrayList<ChartItem> getPassRate() throws RemoteException {
         try {
             System.out.print("Test Saved");
-            String query = "Select (Count(status)* 100 / (Select Count(*) From result)) as Score From result";
+            String query = "Select (Count(CASE WHEN result.status=1 THEN 1 END)* 100 / (Select Count(*) From result)) as Score From result";
             PreparedStatement ps = cn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             ArrayList<ChartItem> chartList = new ArrayList();

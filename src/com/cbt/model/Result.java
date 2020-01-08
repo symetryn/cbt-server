@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cbt.model;
 
 import com.google.gson.Gson;
@@ -10,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
+ * Model for storing result
  * @author Symetryn
  */
 public class Result implements Serializable {
@@ -25,22 +20,10 @@ public class Result implements Serializable {
     private Test test;
     private User user;
 
-    /**
-     *
-     */
     public Result() {
         resultItem = new ArrayList<>();
     }
 
-    /**
-     * Overloaded constructor showing polymorphism
-     * @param id
-     * @param testId
-     * @param userId
-     * @param marks
-     * @param status
-     * @param resultItem
-     */
     public Result(int id, int testId, int userId, int marks, Boolean status, ArrayList<ResultItem> resultItem) {
         this.id = id;
         this.testId = testId;
@@ -50,47 +33,39 @@ public class Result implements Serializable {
         this.resultItem = resultItem;
     }
 
-    //getters and setters
+    //Getter and setters methods for result model
     public int getId() {
         return id;
     }
 
-  
     public void setId(int id) {
         this.id = id;
     }
 
-    
     public int getTestId() {
         return testId;
     }
 
-   
     public void setTestId(int testId) {
         this.testId = testId;
     }
 
-    
     public int getUserId() {
         return userId;
     }
 
-  
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    
     public int getMarks() {
         return marks;
     }
 
-    
     public void setMarks(int marks) {
         this.marks = marks;
     }
 
-    
     public Boolean getStatus() {
         return status;
     }
@@ -99,32 +74,26 @@ public class Result implements Serializable {
         this.status = status;
     }
 
-  
     public ArrayList<ResultItem> getResultItem() {
         return resultItem;
     }
 
-   
     public void setResultItem(ArrayList<ResultItem> resultItem) {
         this.resultItem = resultItem;
     }
 
-   
     public void pushResultItem(ResultItem r) {
         resultItem.add(r);
     }
 
-    
     public void addMarks(Integer i) {
         this.marks += i;
     }
 
-   
     public Test getTest() {
         return test;
     }
 
-   
     public void setTest(Test test) {
         this.test = test;
     }
@@ -137,7 +106,6 @@ public class Result implements Serializable {
         this.user = user;
     }
 
-    
     @Override
     public String toString() {
         Gson g = new Gson();
