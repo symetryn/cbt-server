@@ -18,15 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * 
- */
 public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements TestDao {
 
     Connection cn = DbConnection.myConnection();
@@ -84,7 +75,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             throw new Error(e);
         }
     }
-
+    //saves each question item with respect to testId passed
     private void saveQuestion(int testId, Question question) {
         try {
             String query = "INSERT INTO question (TITLE,MARKS,TEST_ID) VALUES(?,?,?)";
@@ -208,9 +199,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));
                 t.setDate(rs.getDate("date"));
-                testList.add(t);
-                System.out.println(t.getTitle());
-
+                testList.add(t);              
             }
             return testList;
 
@@ -360,24 +349,15 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             pss.setInt(1, test.getId());
             System.out.println(pss.executeUpdate() + "removed");
             for (Question value : questions) {
-                System.out.println(questions.size());
-//                if (questions.size() > 1 && value.getId() != null) {
-//                    removeQuery += value.getId() + ",";
-//                }
-//                saveQuestion(test.getId(), value);
                 updateQuestion(test.getId(), value);
 
             }
-
-//            questions.forEach((value) -> {
-//              
-//                
-//            });
         } catch (SQLException e) {
             throw new Error(e);
         }
     }
 
+    //updates question for each testid with question parameter
     private void updateQuestion(int testId, Question question) {
         try {
 
@@ -385,6 +365,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 saveQuestion(testId, question);
                 System.out.println("added new question from update");
             } else {
+                //insert question
                 String query = "INSERT INTO question (TITLE,MARKS,TEST_ID,QID) VALUES(?,?,?,?)";
                 PreparedStatement ps = cn.prepareStatement(query);
                 ps.setString(1, question.getTitle());
@@ -392,12 +373,13 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 ps.setInt(3, testId);
                 ps.setInt(4, question.getId());
                 ps.executeUpdate();
-
+                //deleted prexisting answers
                 String deleteQuery = "DELETE FROM answer WHERE question_id=?";
                 PreparedStatement psdt = cn.prepareStatement(deleteQuery);
                 psdt.setInt(1, question.getId());
                 psdt.executeUpdate();
 
+                //enter all answers
                 String newAnswerQuery = "INSERT INTO answer (TITLE,CORRECT_STATUS,QUESTION_ID) VALUES(?,?,?)";
                 PreparedStatement pmt = cn.prepareStatement(newAnswerQuery);
 
@@ -462,7 +444,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * verify the password of the test before accessing it
-     *
+     * 
      * @param testId value of the testId
      * @param password password of specific test to be inserted
      * @return return the boolean value as a result
@@ -598,7 +580,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             PreparedStatement ps = cn.prepareStatement(resultItemsQuery);
             ps.setInt(1, resultId);
             ResultSet rslt = ps.executeQuery();
-
+            //creating result items
             while (rslt.next()) {
                 Question q = new Question();
                 q.setTitle(rslt.getString("title"));
@@ -620,18 +602,17 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     @Override
     public ArrayList<Result> getResultByUser(int userId) throws RemoteException {
         try {
-
             String resultQuery = "SELECT * FROM RESULT"
                     + " INNER JOIN TEST"
                     + " ON test.TID = result.test_id"
                     + " WHERE user_id=?";
             PreparedStatement psmt = cn.prepareStatement(resultQuery);
-            int resultId;
             psmt.setInt(1, userId);
 
             ResultSet rs = psmt.executeQuery();
 
             ArrayList<Result> results = new ArrayList<>();
+            //add result results array
             while (rs.next()) {
                 Result result = new Result();
                 Test test = new Test();
@@ -651,7 +632,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 test.setFullMarks(rs.getInt("full_marks"));
                 result.setTest(test);
                 results.add(result);
-                result.toString();
+                
             }
             return results;
 
@@ -677,6 +658,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 result.setId(rs.getInt("RID"));
                 result.setMarks(rs.getInt("marks"));
                 result.setStatus(rs.getBoolean("status"));
+                
+                //creating user
                 User u = new User();
                 u.setEmail(rs.getString("email"));
                 u.setFirstName(rs.getString("firstname"));
@@ -685,6 +668,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 u.setSemester(rs.getInt("semester"));
                 u.setUserID(rs.getInt("UID"));
                 u.setRole(rs.getString("role"));
+                
+                //creating test
                 Test t = new Test();
                 t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));

@@ -1,4 +1,3 @@
-
 package com.cbt.dao;
 
 import com.cbt.model.User;
@@ -13,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * 
+ *
  */
 public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements UserDao {
 
@@ -29,6 +28,7 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * validate the user credentials and returns object of the user
+     *
      * @param Username value of username to validate
      * @param Password value of password to validate
      * @return the object of the User
@@ -63,27 +63,26 @@ public class UserDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
     /**
      * Register the new user and save the user credentials into Users table
-     * @param user Object4 of the User
+     *
+     * @param user Object of the User
      * @throws RemoteException
      */
     @Override
     public void registerUser(User user) throws RemoteException {
         try {
             System.out.print("print called");
-            String query = "INSERT INTO USERS (UID,FIRSTNAME,LASTNAME,EMAIL,PHOTO,PASSWORD,LEVEL,SEMESTER) VALUES(?,?,?,?,?,?,?,?) ";
+            String query = "INSERT INTO USERS (UID,FIRSTNAME,LASTNAME,EMAIL,PASSWORD,LEVEL,SEMESTER) VALUES(?,?,?,?,?,?,?) ";
             PreparedStatement ps = cn.prepareStatement(query);
 
             ps.setInt(1, user.getUserID());
             ps.setString(2, user.getFirstName());
             ps.setString(3, user.getLastName());
             ps.setString(4, user.getEmail());
-            ps.setString(5, user.getImageUrl());
-            ps.setString(6, user.getPassword());
-            ps.setInt(7, user.getLevel());
-            ps.setInt(8, user.getSemester());
+            ps.setString(5, user.getPassword());
+            ps.setInt(6, user.getLevel());
+            ps.setInt(7, user.getSemester());
 
-            int rows=ps.executeUpdate();
-           
+            int rows = ps.executeUpdate();
 
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
