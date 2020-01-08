@@ -10,10 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+<<<<<<< HEAD
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,6 +25,8 @@ import java.util.logging.Logger;
  * 
  * @author Dhruba
  */
+=======
+>>>>>>> 89b2ece25b28b1ea4c415e7046d92a0792c7d1d5
 public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements StatsDao {
 
     Connection cn = DbConnection.myConnection();
@@ -103,7 +105,7 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
             ResultSet rs = ps.executeQuery();
             ArrayList<ChartItem> chartList = new ArrayList();
             if (rs.next()) {
-                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
+                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "green");
 
                 chartList.add(c);
                 return chartList;
@@ -141,6 +143,7 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
         }
     }
 
+<<<<<<< HEAD
 //    @Override
 //    public ArrayList<ChartItem> getHighestPassedTests() throws RemoteException {
 //        try {
@@ -167,6 +170,9 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
      * @return the arraylist of top 10 students
      * @throws RemoteException
      */
+=======
+
+>>>>>>> 89b2ece25b28b1ea4c415e7046d92a0792c7d1d5
     @Override
     public ArrayList<User> getTopStudents() throws RemoteException {
         try {
@@ -214,7 +220,6 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
                 labelList.add(rs.getString(1));
 
                 valueList.add(rs.getInt(3));
-//         new Integer[]{rs.getInt(3)};
             }
             ArrayList<ChartItem> chartList = new ArrayList<>();
             chartList.add(new ChartItem(new String[]{"Pass Percentage"}, valueList.toArray(new Integer[chartList.size()]), null, null));
@@ -244,7 +249,7 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
             ResultSet rs = ps.executeQuery();
             ArrayList<ChartItem> chartList = new ArrayList();
             if (rs.next()) {
-                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
+                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "green");
 
                 chartList.add(c);
                 return chartList;
@@ -272,7 +277,7 @@ public class StatsDaoImpl extends java.rmi.server.UnicastRemoteObject implements
             ResultSet rs = ps.executeQuery();
             ArrayList<ChartItem> chartList = new ArrayList();
             if (rs.next()) {
-                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "grey");
+                ChartItem c = new ChartItem(new Integer[]{rs.getInt(1)}, "red");
 
                 chartList.add(c);
                 return chartList;
