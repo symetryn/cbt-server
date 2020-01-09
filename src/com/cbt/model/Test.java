@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Model for storing test data
+ * 
  * @author Symetryn
  */
 public class Test implements Serializable {
@@ -32,8 +33,7 @@ public class Test implements Serializable {
         questions = new ArrayList();
     }
 
-    
-    //Getter and setter and method for test model
+    // Getter and setter and method for test model
     public String getTitle() {
         return title;
     }

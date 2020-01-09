@@ -5,25 +5,25 @@ import java.util.ArrayList;
 
 /**
  * Model for storing chart data with labels
+ * 
  * @author Symetryn
  */
 public class StatItem implements Serializable {
     private ArrayList<ChartItem> chartList;
-    private String [] labelList;
-    
+    private String[] labelList;
+
     private static final long serialVersionUID = 6L;
-    
-    public StatItem(){
-        chartList= new ArrayList();
+
+    public StatItem() {
+        chartList = new ArrayList();
     }
 
-    public StatItem( String[] labelList,ArrayList<ChartItem> chartList) {
+    public StatItem(String[] labelList, ArrayList<ChartItem> chartList) {
         this.chartList = chartList;
         this.labelList = labelList;
     }
-    
-    // getter and setter method for stat item model
 
+    // Getter and setter method for stat item
     public ArrayList<ChartItem> getChartList() {
         return chartList;
     }
@@ -40,8 +40,4 @@ public class StatItem implements Serializable {
         this.labelList = labelList;
     }
 
-  
-    
-    
 }
-

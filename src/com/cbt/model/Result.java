@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Model for storing result
+ * 
  * @author Symetryn
  */
 public class Result implements Serializable {
@@ -20,10 +21,16 @@ public class Result implements Serializable {
     private Test test;
     private User user;
 
+    /**
+     * Initializing the arraylist of result item
+     */
     public Result() {
         resultItem = new ArrayList<>();
     }
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public Result(int id, int testId, int userId, int marks, Boolean status, ArrayList<ResultItem> resultItem) {
         this.id = id;
         this.testId = testId;
@@ -33,7 +40,7 @@ public class Result implements Serializable {
         this.resultItem = resultItem;
     }
 
-    //Getter and setters methods for result model
+    // Getter and setters methods for result model
     public int getId() {
         return id;
     }

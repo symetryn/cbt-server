@@ -6,22 +6,24 @@ import java.io.Serializable;
 
 /**
  * Model for creating chart data to be used for quick chart
+ * 
  * @author Dhruba
  */
-public class ChartItem implements Serializable{
+public class ChartItem implements Serializable {
 
     String[] label;
     Integer[] data;
     Boolean fill;
     String borderColor;
     String backgroundColor;
-    
-     private static final long serialVersionUID = 5L;
+
+    private static final long serialVersionUID = 5L;
 
     /**
-     *
-     * @param data info to represent in chart
-     * @param backgroundColor color for the chart
+     * Overloaded constructor showing polymorphism
+     * 
+     * @param data            info to create chart
+     * @param backgroundColor background color of chart
      */
     public ChartItem(Integer[] data, String backgroundColor) {
         this.data = data;
@@ -30,9 +32,9 @@ public class ChartItem implements Serializable{
 
     /**
      *
-     * @param label string array of label
-     * @param data info to create chart
-     * @param fill color to be filled in the chart
+     * @param label       string array of label
+     * @param data        info to create chart
+     * @param fill        color to be filled in the chart
      * @param borderColor border color of the chart
      */
     public ChartItem(String[] label, Integer[] data, Boolean fill, String borderColor) {
@@ -41,7 +43,10 @@ public class ChartItem implements Serializable{
         this.fill = fill;
         this.borderColor = borderColor;
     }
-// overriding the toString method
+
+    /**
+     * Overriding the toString methods
+     */
     @Override
     public String toString() {
         Gson gson = new Gson();

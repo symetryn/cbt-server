@@ -6,8 +6,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
- *
- * @author Symetryn
+ * Interface for defining method for test
+ * 
  */
 public interface TestDao extends java.rmi.Remote {
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Model for storing each question and selected answer after exam
+ * 
  * @author Symetryn
  */
 public class ResultItem implements Serializable {
@@ -15,9 +16,16 @@ public class ResultItem implements Serializable {
     private Boolean correct;
     private Question question;
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
+
     public ResultItem() {
     }
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public ResultItem(Integer question, String correctAnswer, String selectedAnswer, Boolean correct) {
         this.questionId = question;
         this.correctAnswer = correctAnswer;
@@ -25,14 +33,20 @@ public class ResultItem implements Serializable {
         this.correct = correct;
     }
 
-    public ResultItem(Integer questionId, String correctAnswer, String selectedAnswer, Boolean correct, Question question) {
+    /**
+     * Overloaded constructor showing polymorphism
+     */
+
+    public ResultItem(Integer questionId, String correctAnswer, String selectedAnswer, Boolean correct,
+            Question question) {
         this.questionId = questionId;
         this.correctAnswer = correctAnswer;
         this.selectedAnswer = selectedAnswer;
         this.correct = correct;
         this.question = question;
     }
-//Getter and setter methods for result item model
+
+    // Getter and setter methods for result item model
     public Integer getQuestionId() {
         return questionId;
     }

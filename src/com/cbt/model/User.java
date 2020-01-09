@@ -27,6 +27,8 @@ private String role;
         this.userID = userID;
     }
 
+    
+    //Getter and setter method for user model
     public String getFirstName() {
         return firstName;
     }

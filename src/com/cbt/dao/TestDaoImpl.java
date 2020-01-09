@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements TestDao {
 
     Connection cn = DbConnection.myConnection();
 
     /**
-     *
+     * Initializing constructor of base class
+     * 
      * @throws RemoteException
      */
     public TestDaoImpl() throws RemoteException {
@@ -75,7 +75,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             throw new Error(e);
         }
     }
-    //saves each question item with respect to testId passed
+
+    // saves each question item with respect to testId passed
     private void saveQuestion(int testId, Question question) {
         try {
             String query = "INSERT INTO question (TITLE,MARKS,TEST_ID) VALUES(?,?,?)";
@@ -105,11 +106,9 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                     int[] numUpdates = psmt.executeBatch();
                     for (int i = 0; i < numUpdates.length; i++) {
                         if (numUpdates[i] == -2) {
-                            System.out.println("Execution " + i
-                                    + ": unknown number of rows updated");
+                            System.out.println("Execution " + i + ": unknown number of rows updated");
                         } else {
-                            System.out.println("Execution " + i
-                                    + "successful: " + numUpdates[i] + " rows updated");
+                            System.out.println("Execution " + i + "successful: " + numUpdates[i] + " rows updated");
                         }
                     }
                 } else {
@@ -199,7 +198,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));
                 t.setDate(rs.getDate("date"));
-                testList.add(t);              
+                testList.add(t);
             }
             return testList;
 
@@ -209,8 +208,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     }
 
     /**
-     * Get the searched test from the test table with reference to value in
-     * search bar
+     * Get the searched test from the test table with reference to value in search
+     * bar
      *
      * @param searchQuery searched value in search bar
      * @return the search result in the arraylist of Test object
@@ -298,7 +297,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
 
                 while (rsa.next()) {
                     System.out.println("answer ran");
-                    q.addAnswer(new Answer(rsa.getInt("AID"), rsa.getString("title"), rsa.getBoolean("correct_status")));
+                    q.addAnswer(
+                            new Answer(rsa.getInt("AID"), rsa.getString("title"), rsa.getBoolean("correct_status")));
                 }
 
                 test.pushQuestion(q);
@@ -357,7 +357,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         }
     }
 
-    //updates question for each testid with question parameter
+    // updates question for each testid with question parameter
     private void updateQuestion(int testId, Question question) {
         try {
 
@@ -365,7 +365,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 saveQuestion(testId, question);
                 System.out.println("added new question from update");
             } else {
-                //insert question
+                // insert question
                 String query = "INSERT INTO question (TITLE,MARKS,TEST_ID,QID) VALUES(?,?,?,?)";
                 PreparedStatement ps = cn.prepareStatement(query);
                 ps.setString(1, question.getTitle());
@@ -373,13 +373,13 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 ps.setInt(3, testId);
                 ps.setInt(4, question.getId());
                 ps.executeUpdate();
-                //deleted prexisting answers
+                // deleted prexisting answers
                 String deleteQuery = "DELETE FROM answer WHERE question_id=?";
                 PreparedStatement psdt = cn.prepareStatement(deleteQuery);
                 psdt.setInt(1, question.getId());
                 psdt.executeUpdate();
 
-                //enter all answers
+                // enter all answers
                 String newAnswerQuery = "INSERT INTO answer (TITLE,CORRECT_STATUS,QUESTION_ID) VALUES(?,?,?)";
                 PreparedStatement pmt = cn.prepareStatement(newAnswerQuery);
 
@@ -409,10 +409,11 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     /**
      * Get the test by level and semester from test table
      *
-     * @param level value of the specific level
+     * @param userId
+     * @param level    value of the specific level
      * @param semester value of the specific semester
      * @return the available Test with reference to level and semester in the
-     * arraylist of Test object
+     *         arraylist of Test object
      * @throws RemoteException
      */
     @Override
@@ -445,7 +446,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
     /**
      * verify the password of the test before accessing it
      * 
-     * @param testId value of the testId
+     * @param testId   value of the testId
      * @param password password of specific test to be inserted
      * @return return the boolean value as a result
      * @throws RemoteException
@@ -506,11 +507,10 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                     try {
                         psmt.setInt(1, resultItem.getQuestionId());
                         psmt.setString(2, resultItem.getCorrectAnswer());
-                        
+
                         if (resultItem.getSelectedAnswer() != null) {
                             psmt.setString(3, resultItem.getSelectedAnswer());
-                        }
-                        else{
+                        } else {
                             psmt.setString(3, "none");
                         }
                         psmt.setBoolean(4, resultItem.getCorrect());
@@ -546,9 +546,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             Test test = new Test();
             ArrayList<ResultItem> resultItems = new ArrayList<>();
 
-            String resultQuery = "SELECT * FROM RESULT"
-                    + " INNER JOIN TEST"
-                    + " ON test.TID = result.test_id"
+            String resultQuery = "SELECT * FROM RESULT" + " INNER JOIN TEST" + " ON test.TID = result.test_id"
                     + " WHERE RID=?";
             PreparedStatement psmt = cn.prepareStatement(resultQuery);
             psmt.setInt(1, resultId);
@@ -572,21 +570,19 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 result.setTest(test);
             }
 
-            String resultItemsQuery = "SELECT *"
-                    + "FROM question "
-                    + "INNER JOIN result_item "
-                    + "ON result_item.question_id =question.QID "
-                    + "WHERE result_id=?";
+            String resultItemsQuery = "SELECT *" + "FROM question " + "INNER JOIN result_item "
+                    + "ON result_item.question_id =question.QID " + "WHERE result_id=?";
             PreparedStatement ps = cn.prepareStatement(resultItemsQuery);
             ps.setInt(1, resultId);
             ResultSet rslt = ps.executeQuery();
-            //creating result items
+            // creating result items
             while (rslt.next()) {
                 Question q = new Question();
                 q.setTitle(rslt.getString("title"));
                 q.setMarks(rslt.getInt("marks"));
                 q.setId(rslt.getInt("QID"));
-                resultItems.add(new ResultItem(resultId, rslt.getString("correct_answer"), rslt.getString("selected_answer"), rslt.getBoolean("correct"), q));
+                resultItems.add(new ResultItem(resultId, rslt.getString("correct_answer"),
+                        rslt.getString("selected_answer"), rslt.getBoolean("correct"), q));
             }
             result.setResultItem(resultItems);
             System.out.println(result.toString());
@@ -599,12 +595,17 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         return new Result();
     }
 
+    /**
+     * Get the result of the user with reference to userID
+     * 
+     * @param userId id of the student to view their respective result
+     * @return result arraylist of the user
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<Result> getResultByUser(int userId) throws RemoteException {
         try {
-            String resultQuery = "SELECT * FROM RESULT"
-                    + " INNER JOIN TEST"
-                    + " ON test.TID = result.test_id"
+            String resultQuery = "SELECT * FROM RESULT" + " INNER JOIN TEST" + " ON test.TID = result.test_id"
                     + " WHERE user_id=?";
             PreparedStatement psmt = cn.prepareStatement(resultQuery);
             psmt.setInt(1, userId);
@@ -612,7 +613,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
             ResultSet rs = psmt.executeQuery();
 
             ArrayList<Result> results = new ArrayList<>();
-            //add result results array
+            // add result results array
             while (rs.next()) {
                 Result result = new Result();
                 Test test = new Test();
@@ -632,7 +633,7 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 test.setFullMarks(rs.getInt("full_marks"));
                 result.setTest(test);
                 results.add(result);
-                
+
             }
             return results;
 
@@ -642,6 +643,12 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
         return new ArrayList<>();
     }
 
+    /**
+     * To get all the result
+     * 
+     * @return arraylist of all the students
+     * @throws RemoteException
+     */
     @Override
     public ArrayList<Result> getAllResult() throws RemoteException {
         try {
@@ -658,8 +665,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 result.setId(rs.getInt("RID"));
                 result.setMarks(rs.getInt("marks"));
                 result.setStatus(rs.getBoolean("status"));
-                
-                //creating user
+
+                // creating user
                 User u = new User();
                 u.setEmail(rs.getString("email"));
                 u.setFirstName(rs.getString("firstname"));
@@ -668,8 +675,8 @@ public class TestDaoImpl extends java.rmi.server.UnicastRemoteObject implements 
                 u.setSemester(rs.getInt("semester"));
                 u.setUserID(rs.getInt("UID"));
                 u.setRole(rs.getString("role"));
-                
-                //creating test
+
+                // creating test
                 Test t = new Test();
                 t.setId(rs.getInt("TID"));
                 t.setTitle(rs.getString("title"));

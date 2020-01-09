@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Model for answers of each question
+ * 
  * @author Symetryn
  */
 public class Answer implements Serializable {
@@ -14,15 +15,24 @@ public class Answer implements Serializable {
     private Boolean correctAnswer;
     private Integer id;
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public Answer() {
     }
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public Answer(String title, boolean correctAnswer) {
         this.title = title;
         this.correctAnswer = correctAnswer;
 
     }
 
+    /**
+     * Overloaded constructor showing polymorphism
+     */
     public Answer(int id, String title, boolean correctAnswer) {
         this.title = title;
         this.correctAnswer = correctAnswer;
@@ -30,7 +40,7 @@ public class Answer implements Serializable {
 
     }
 
-    // Getters and setters for the answer model
+    // Getters and setters method for Answer model
     public String getTitle() {
         return title;
     }
